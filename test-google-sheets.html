@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Connectivity Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: white;
+            line-height: 1.6;
+        }
+        .test-container {
+            background: rgba(55, 65, 81, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f59e0b;
+        }
+        .header h1 {
+            color: #f59e0b;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        .result {
+            background: rgba(17, 24, 39, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #f59e0b;
+            transition: all 0.3s ease;
+        }
+        .result:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        .error {
+            border-left-color: #dc2626;
+            background: rgba(220, 38, 38, 0.1);
+        }
+        .success {
+            border-left-color: #059669;
+            background: rgba(5, 150, 105, 0.1);
+        }
+        .warning {
+            border-left-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        .info {
+            border-left-color: #0ea5e9;
+            background: rgba(14, 165, 233, 0.1);
+        }
+        button {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #111827;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .url-display {
+            background: #000;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+            border: 1px solid #374151;
+        }
+        pre {
+            background: #000;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 12px;
+            border: 1px solid #374151;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #4b5563;
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+        }
+        th {
+            background: rgba(75, 85, 99, 0.8);
+            font-weight: bold;
+            color: #f59e0b;
+        }
+        .column-letter {
+            background: #059669;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-success { background: #059669; }
+        .status-error { background: #dc2626; }
+        .status-warning { background: #f59e0b; }
+        .status-info { background: #0ea5e9; }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        .progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(75, 85, 99, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .apartment-preview {
+            background: rgba(17, 24, 39, 0.9);
+            border: 1px solid #374151;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .apartment-preview h4 {
+            color: #f59e0b;
+            margin-bottom: 10px;
+        }
+        .field-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        .field-label {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+        .field-value {
+            color: white;
+            font-weight: 600;
+        }
+        .link-test {
+            color: #0ea5e9;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .link-test:hover {
+            color: #06b6d4;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="header">
+            <h1>🔍 Google Sheets Connectivity Test</h1>
+            <p>Comprehensive testing of your Google Sheets CSV connection</p>
+        </div>
+        
+        <div class="url-display">
+            <strong>Your CSV URL:</strong><br>
+            https://docs.google.com/spreadsheets/d/e/2PACX-1vQwYSSUeBBko88Bk_8HM2mOsNkrOcfJYKKAx5IqpoiQ8l8gBRAG_8I38mYRKvJRY5cWpctE1GW1_xrb/pub?gid=0&single=true&output=csv
+        </div>
+
+        <div class="button-group">
+            <button onclick="testBasicConnectivity()">🌐 Test Basic Connectivity</button>
+            <button onclick="testCSVStructure()">📊 Test CSV Structure</button>
+            <button onclick="testRow6Headers()">📋 Test Row 6 Headers</button>
+            <button onclick="testApartmentData()">🏠 Test Apartment Data</button>
+            <button onclick="testFullParser()">🚀 Test Full Parser</button>
+            <button onclick="clearResults()">🧹 Clear Results</button>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Your exact CSV URL
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQwYSSUeBBko88Bk_8HM2mOsNkrOcfJYKKAx5IqpoiQ8l8gBRAG_8I38mYRKvJRY5cWpctE1GW1_xrb/pub?gid=0&single=true&output=csv';
+
+        function logResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            
+            const statusIcon = {
+                'success': '✅',
+                'error': '❌',
+                'warning': '⚠️',
+                'info': 'ℹ️'
+            }[type] || 'ℹ️';
+            
+            div.innerHTML = `
+                <div style="display: flex; align-items: flex-start; gap: 10px;">
+                    <span style="font-size: 1.2em;">${statusIcon}</span>
+                    <div style="flex: 1;">
+                        <strong>${new Date().toLocaleTimeString()}</strong><br>
+                        ${message}
+                    </div>
+                </div>
+            `;
+            results.appendChild(div);
+            
+            // Auto-scroll to latest result
+            div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            console.log(`[${type.toUpperCase()}] ${message.replace(/<[^>]*>/g, '')}`);
+        }
+
+        function updateProgress(percent) {
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = `${percent}%`;
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim().replace(/"/g, ''));
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current.trim().replace(/"/g, ''));
+            return result;
+        }
+
+        function getColumnLetter(index) {
+            return String.fromCharCode(65 + index);
+        }
+
+        async function testBasicConnectivity() {
+            logResult('🔄 Testing basic connectivity to Google Sheets...', 'info');
+            updateProgress(10);
+            
+            try {
+                const startTime = Date.now();
+                const response = await fetch(CSV_URL);
+                const endTime = Date.now();
+                
+                updateProgress(50);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const csvText = await response.text();
+                const responseTime = endTime - startTime;
+                
+                updateProgress(100);
+                
+                logResult(`✅ <strong>Connection Successful!</strong><br>
+                    • Response time: ${responseTime}ms<br>
+                    • Status: ${response.status} ${response.statusText}<br>
+                    • Content length: ${csvText.length} characters<br>
+                    • Content type: ${response.headers.get('content-type') || 'Not specified'}`, 'success');
+                
+                // Show first 300 characters
+                logResult(`📄 <strong>First 300 characters:</strong><pre>${csvText.substring(0, 300)}...</pre>`, 'info');
+                
+                return csvText;
+
+            } catch (error) {
+                updateProgress(0);
+                logResult(`❌ <strong>Connection Failed!</strong><br>
+                    Error: ${error.message}<br>
+                    This could mean:<br>
+                    • The sheet is not published<br>
+                    • The URL is incorrect<br>
+                    • Network connectivity issues<br>
+                    • CORS restrictions`, 'error');
+                return null;
+            }
+        }
+
+        async function testCSVStructure() {
+            logResult('🔄 Testing CSV structure and format...', 'info');
+            updateProgress(10);
+            
+            try {
+                const response = await fetch(CSV_URL);
+                const csvText = await response.text();
+                
+                updateProgress(30);
+                
+                const lines = csvText.split('\n').filter(line => line.trim());
+                const totalLines = lines.length;
+                
+                updateProgress(60);
+                
+                logResult(`📊 <strong>CSV Structure Analysis:</strong><br>
+                    • Total lines: ${totalLines}<br>
+                    • Expected minimum: 7 lines (1 header + status defs + data)<br>
+                    • Status: ${totalLines >= 7 ? '✅ Sufficient' : '❌ Insufficient'}`, 
+                    totalLines >= 7 ? 'success' : 'error');
+
+                // Analyze first 10 rows
+                let structureHTML = '<table><tr><th>Row</th><th>Columns</th><th>First 3 Cells</th><th>Analysis</th></tr>';
+                
+                for (let i = 0; i < Math.min(10, lines.length); i++) {
+                    const row = parseCSVLine(lines[i]);
+                    const rowNum = i + 1;
+                    const first3 = row.slice(0, 3).map(cell => `"${cell}"`).join(', ');
+                    
+                    let analysis = '';
+                    if (rowNum === 1) {
+                        analysis = row.some(cell => cell.toLowerCase().includes('availability')) ? 
+                            '✅ Has Availability' : '❌ Missing Availability';
+                    } else if (rowNum >= 2 && rowNum <= 5) {
+                        analysis = '📋 Status definitions';
+                    } else if (rowNum === 6) {
+                        analysis = '📋 Headers row';
+                    } else {
+                        analysis = '📋 Data row';
+                    }
+                    
+                    structureHTML += `<tr>
+                        <td><strong>${rowNum}</strong></td>
+                        <td>${row.length}</td>
+                        <td style="font-family: monospace; font-size: 11px;">${first3}</td>
+                        <td>${analysis}</td>
+                    </tr>`;
+                }
+                
+                structureHTML += '</table>';
+                
+                updateProgress(100);
+                logResult(`📋 <strong>Row-by-Row Analysis:</strong>${structureHTML}`, 'info');
+
+            } catch (error) {
+                updateProgress(0);
+                logResult(`❌ Error analyzing CSV structure: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRow6Headers() {
+            logResult('🔄 Testing Row 6 headers (critical for parser)...', 'info');
+            updateProgress(10);
+            
+            try {
+                const response = await fetch(CSV_URL);
+                const csvText = await response.text();
+                const lines = csvText.split('\n').filter(line => line.trim());
+                
+                updateProgress(30);
+                
+                if (lines.length < 6) {
+                    logResult(`❌ Not enough rows! Found ${lines.length}, need at least 6`, 'error');
+                    return;
+                }
+
+                const row6 = parseCSVLine(lines[5]); // Row 6 (0-indexed = 5)
+                
+                updateProgress(60);
+                
+                // Check for required columns
+                let hasDescripton = false;
+                let hasApartmentNr = false;
+                let hasStatus = false;
+                let hasLinkAlbums = false;
+                let hasLinkViews = false;
+                
+                let tableHTML = '<table><tr><th>Col</th><th>Letter</th><th>Header</th><th>Status</th></tr>';
+                
+                row6.forEach((header, index) => {
+                    const letter = getColumnLetter(index);
+                    const headerLower = header.toLowerCase();
+                    
+                    let status = '';
+                    let statusClass = '';
+                    
+                    if (headerLower.includes('descripton') || headerLower.includes('description')) {
+                        hasDescripton = true;
+                        status = '✅ DESCRIPTON ANCHOR';
+                        statusClass = 'success';
+                    } else if (headerLower.includes('apartment') && headerLower.includes('nr')) {
+                        hasApartmentNr = true;
+                        status = '✅ APARTMENT NR';
+                        statusClass = 'success';
+                    } else if (headerLower.includes('status')) {
+                        hasStatus = true;
+                        status = '✅ STATUS COLUMN';
+                        statusClass = 'success';
+                    } else if (headerLower.includes('link') && headerLower.includes('album')) {
+                        hasLinkAlbums = true;
+                        status = '✅ LINK ALBUMS';
+                        statusClass = 'success';
+                    } else if (headerLower.includes('link') && headerLower.includes('view')) {
+                        hasLinkViews = true;
+                        status = '✅ LINK VIEWS';
+                        statusClass = 'success';
+                    } else if (header.trim() !== '') {
+                        status = '📋 Data Column';
+                        statusClass = 'info';
+                    } else {
+                        status = '⚪ Empty';
+                        statusClass = 'warning';
+                    }
+                    
+                    tableHTML += `<tr class="${statusClass}">
+                        <td class="column-letter">${index + 1}</td>
+                        <td class="column-letter">${letter}</td>
+                        <td><strong>"${header}"</strong></td>
+                        <td>${status}</td>
+                    </tr>`;
+                });
+                
+                tableHTML += '</table>';
+                
+                updateProgress(90);
+                
+                // Summary of findings
+                const criticalIssues = [];
+                if (!hasDescripton) criticalIssues.push('Missing "Descripton" column');
+                if (!hasApartmentNr) criticalIssues.push('Missing "Apartment Nr" column');
+                if (!hasStatus) criticalIssues.push('Missing "Status" column');
+                
+                const resultType = criticalIssues.length === 0 ? 'success' : 'error';
+                
+                logResult(`📊 <strong>Row 6 Header Analysis:</strong>${tableHTML}`, 'info');
+                
+                if (criticalIssues.length === 0) {
+                    logResult(`✅ <strong>All critical headers found!</strong><br>
+                        • Descripton: ${hasDescripton ? '✅' : '❌'}<br>
+                        • Apartment Nr: ${hasApartmentNr ? '✅' : '❌'}<br>
+                        • Status: ${hasStatus ? '✅' : '❌'}<br>
+                        • Link Albums: ${hasLinkAlbums ? '✅' : '❌'}<br>
+                        • Link Views: ${hasLinkViews ? '✅' : '❌'}`, 'success');
+                } else {
+                    logResult(`❌ <strong>Critical Issues Found:</strong><br>
+                        ${criticalIssues.map(issue => `• ${issue}`).join('<br>')}<br><br>
+                        <strong>Required fixes:</strong><br>
+                        • Column B must be "Apartment Nr"<br>
+                        • Must have "Descripton" (with typo)<br>
+                        • Must have "Status" column`, 'error');
+                }
+                
+                updateProgress(100);
+
+            } catch (error) {
+                updateProgress(0);
+                logResult(`❌ Error testing Row 6 headers: ${error.message}`, 'error');
+            }
+        }
+
+        async function testApartmentData() {
+            logResult('🔄 Testing apartment data parsing...', 'info');
+            updateProgress(10);
+            
+            try {
+                const response = await fetch(CSV_URL);
+                const csvText = await response.text();
+                const lines = csvText.split('\n').filter(line => line.trim());
+                
+                updateProgress(30);
+                
+                if (lines.length < 7) {
+                    logResult(`❌ Not enough data rows! Found ${lines.length}, need at least 7`, 'error');
+                    return;
+                }
+
+                const row6 = parseCSVLine(lines[5]); // Headers
+                
+                updateProgress(50);
+                
+                // Find key column indices
+                let apartmentNrIndex = -1;
+                let statusIndex = -1;
+                let linkAlbumsIndex = -1;
+                let linkViewsIndex = -1;
+                
+                row6.forEach((header, index) => {
+                    const headerLower = header.toLowerCase();
+                    if (headerLower.includes('apartment') && headerLower.includes('nr')) {
+                        apartmentNrIndex = index;
+                    } else if (headerLower.includes('status')) {
+                        statusIndex = index;
+                    } else if (headerLower.includes('link') && headerLower.includes('album')) {
+                        linkAlbumsIndex = index;
+                    } else if (headerLower.includes('link') && headerLower.includes('view')) {
+                        linkViewsIndex = index;
+                    }
+                });
+                
+                updateProgress(70);
+                
+                // Parse first 3 apartments
+                const apartments = [];
+                for (let i = 6; i < Math.min(9, lines.length); i++) {
+                    const values = parseCSVLine(lines[i]);
+                    
+                    const apartment = {
+                        id: apartmentNrIndex >= 0 ? values[apartmentNrIndex] : 'Unknown',
+                        status: statusIndex >= 0 ? values[statusIndex] : 'Unknown',
+                        linkAlbums: linkAlbumsIndex >= 0 ? values[linkAlbumsIndex] : '',
+                        linkViews: linkViewsIndex >= 0 ? values[linkViewsIndex] : '',
+                        allData: values
+                    };
+                    
+                    apartments.push(apartment);
+                }
+                
+                updateProgress(90);
+                
+                // Display apartment previews
+                let apartmentHTML = '';
+                apartments.forEach((apt, index) => {
+                    apartmentHTML += `
+                        <div class="apartment-preview">
+                            <h4>Apartment ${index + 1}: ${apt.id}</h4>
+                            <div class="field-row">
+                                <span class="field-label">Status:</span>
+                                <span class="field-value">${apt.status}</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Link Albums:</span>
+                                <span class="field-value">${apt.linkAlbums ? 
+                                    `<span class="link-test" onclick="testLink('${apt.linkAlbums}')">${apt.linkAlbums.substring(0, 50)}...</span>` : 
+                                    'Not found'}</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Link Views:</span>
+                                <span class="field-value">${apt.linkViews ? 
+                                    `<span class="link-test" onclick="testLink('${apt.linkViews}')">${apt.linkViews.substring(0, 50)}...</span>` : 
+                                    'Not found'}</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Total Fields:</span>
+                                <span class="field-value">${apt.allData.length}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                updateProgress(100);
+                
+                logResult(`🏠 <strong>Apartment Data Test Results:</strong><br>
+                    • Found ${apartments.length} apartments<br>
+                    • Apartment Nr column: ${apartmentNrIndex >= 0 ? `Column ${apartmentNrIndex + 1}` : 'Not found'}<br>
+                    • Status column: ${statusIndex >= 0 ? `Column ${statusIndex + 1}` : 'Not found'}<br>
+                    • Link Albums column: ${linkAlbumsIndex >= 0 ? `Column ${linkAlbumsIndex + 1}` : 'Not found'}<br>
+                    • Link Views column: ${linkViewsIndex >= 0 ? `Column ${linkViewsIndex + 1}` : 'Not found'}`, 
+                    apartments.length > 0 ? 'success' : 'error');
+                
+                logResult(`📋 <strong>Sample Apartments:</strong>${apartmentHTML}`, 'info');
+
+            } catch (error) {
+                updateProgress(0);
+                logResult(`❌ Error testing apartment data: ${error.message}`, 'error');
+            }
+        }
+
+        async function testFullParser() {
+            logResult('🔄 Testing full parser simulation...', 'info');
+            updateProgress(10);
+            
+            try {
+                const response = await fetch(CSV_URL);
+                const csvText = await response.text();
+                const lines = csvText.split('\n').filter(line => line.trim());
+                
+                updateProgress(20);
+                
+                // Step 1: Find Availability column
+                const row1 = parseCSVLine(lines[0]);
+                let availabilityColumnIndex = -1;
+                for (let i = 0; i < row1.length; i++) {
+                    if (row1[i].toLowerCase().includes('availability')) {
+                        availabilityColumnIndex = i;
+                        break;
+                    }
+                }
+                
+                updateProgress(30);
+                
+                // Step 2: Read status definitions
+                const statusDefinitions = {};
+                if (availabilityColumnIndex >= 0) {
+                    const statusValuesColumnIndex = availabilityColumnIndex + 1;
+                    for (let i = 1; i < Math.min(6, lines.length); i++) {
+                        const values = parseCSVLine(lines[i]);
+                        const statusName = values[availabilityColumnIndex] || '';
+                        const statusValue = values[statusValuesColumnIndex] || '';
+                        
+                        if (statusName && statusValue) {
+                            if (statusName.toLowerCase().includes('free')) {
+                                statusDefinitions['1'] = 'free';
+                            } else if (statusName.toLowerCase().includes('reserved')) {
+                                statusDefinitions['2'] = 'reserved';
+                            } else if (statusName.toLowerCase().includes('sold')) {
+                                statusDefinitions['3'] = 'sold';
+                            }
+                        }
+                    }
+                }
+                
+                updateProgress(50);
+                
+                // Step 3: Find Description and Status columns in Row 6
+                const row6 = parseCSVLine(lines[5]);
+                let descriptionColumnIndex = -1;
+                let statusColumnIndex = -1;
+                
+                for (let i = 0; i < row6.length; i++) {
+                    const header = row6[i].toLowerCase();
+                    if (header.includes('descripton') || header.includes('description')) {
+                        descriptionColumnIndex = i;
+                    }
+                    if (header.includes('status')) {
+                        statusColumnIndex = i;
+                    }
+                }
+                
+                updateProgress(70);
+                
+                // Step 4: Parse apartments
+                const apartments = [];
+                if (descriptionColumnIndex >= 0 && statusColumnIndex >= 0) {
+                    for (let i = 6; i < Math.min(10, lines.length); i++) {
+                        const values = parseCSVLine(lines[i]);
+                        
+                        if (values.length > descriptionColumnIndex && values[descriptionColumnIndex]) {
+                            const apartment = {
+                                id: values[descriptionColumnIndex + 1] || `AP-${i-5}`,
+                                status: statusDefinitions[values[statusColumnIndex]] || 'free',
+                                rawStatus: values[statusColumnIndex],
+                                allFields: values.length
+                            };
+                            apartments.push(apartment);
+                        }
+                    }
+                }
+                
+                updateProgress(90);
+                
+                // Results summary
+                const parserResults = {
+                    step1: availabilityColumnIndex >= 0,
+                    step2: Object.keys(statusDefinitions).length > 0,
+                    step3: descriptionColumnIndex >= 0 && statusColumnIndex >= 0,
+                    step4: apartments.length > 0
+                };
+                
+                const allStepsPass = Object.values(parserResults).every(step => step);
+                
+                logResult(`🚀 <strong>Full Parser Simulation Results:</strong><br>
+                    • Step 1 - Find Availability: ${parserResults.step1 ? '✅' : '❌'}<br>
+                    • Step 2 - Status Definitions: ${parserResults.step2 ? '✅' : '❌'} (${Object.keys(statusDefinitions).length} found)<br>
+                    • Step 3 - Find Headers: ${parserResults.step3 ? '✅' : '❌'}<br>
+                    • Step 4 - Parse Apartments: ${parserResults.step4 ? '✅' : '❌'} (${apartments.length} found)<br><br>
+                    <strong>Overall Result: ${allStepsPass ? '✅ PARSER WILL WORK' : '❌ PARSER WILL FAIL'}</strong>`, 
+                    allStepsPass ? 'success' : 'error');
+                
+                if (apartments.length > 0) {
+                    let apartmentSummary = '<br><strong>Sample Parsed Apartments:</strong><br>';
+                    apartments.slice(0, 3).forEach(apt => {
+                        apartmentSummary += `• ${apt.id}: Status "${apt.rawStatus}" → "${apt.status}" (${apt.allFields} fields)<br>`;
+                    });
+                    logResult(apartmentSummary, 'info');
+                }
+                
+                if (!allStepsPass) {
+                    let fixes = '<br><strong>Required Fixes:</strong><br>';
+                    if (!parserResults.step1) fixes += '• Add "Availability" column in Row 1<br>';
+                    if (!parserResults.step2) fixes += '• Add status definitions in Rows 2-5<br>';
+                    if (!parserResults.step3) fixes += '• Fix Row 6 headers (need "Descripton" and "Status")<br>';
+                    if (!parserResults.step4) fixes += '• Ensure data starts from Row 7<br>';
+                    logResult(fixes, 'warning');
+                }
+                
+                updateProgress(100);
+
+            } catch (error) {
+                updateProgress(0);
+                logResult(`❌ Error in full parser test: ${error.message}`, 'error');
+            }
+        }
+
+        function testLink(url) {
+            if (url && url.trim() !== '') {
+                window.open(url, '_blank');
+                logResult(`🔗 Opened link: ${url}`, 'info');
+            } else {
+                logResult(`❌ Invalid link: ${url}`, 'error');
+            }
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            updateProgress(0);
+            logResult('🧹 Results cleared', 'info');
+        }
+
+        // Auto-run basic connectivity test on page load
+        window.addEventListener('load', () => {
+            logResult('🚀 Google Sheets Connectivity Test Ready', 'info');
+            logResult('Click "Test Basic Connectivity" to start, or run all tests in sequence', 'info');
+        });
+    </script>
+</body>
+</html>

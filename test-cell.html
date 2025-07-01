@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Cell B10 Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1f2937;
+            color: white;
+        }
+        .test-container {
+            background: #374151;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #4b5563;
+        }
+        .result {
+            background: #111827;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        .error {
+            border-left-color: #dc2626;
+            background: #1f1f1f;
+        }
+        .success {
+            border-left-color: #059669;
+            background: #1f1f1f;
+        }
+        button {
+            background: #f59e0b;
+            color: #111827;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #d97706;
+        }
+        .info {
+            background: #1e3a8a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        pre {
+            background: #000;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 Google Sheets Cell B10 Test</h1>
+        
+        <div class="info">
+            <strong>Testing Document:</strong><br>
+            ID: 1L93Lm227wzywjX0GCeDFBMf0-l13nzyqigizBUPCqCo<br>
+            <strong>Target:</strong> Column B, Row 10<br>
+            <strong>Purpose:</strong> Verify we're reading the same file
+        </div>
+
+        <button onclick="testCellB10()">🧪 Test Cell B10</button>
+        <button onclick="testFullCSV()">📄 Test Full CSV</button>
+        <button onclick="testAlternativeURL()">🔄 Test Alternative URL</button>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Your exact Google Sheets document ID
+        const DOCUMENT_ID = '1L93Lm227wzywjX0GCeDFBMf0-l13nzyqigizBUPCqCo';
+        
+        // Different URL formats to test
+        const CSV_URLS = {
+            format1: `https://docs.google.com/spreadsheets/d/${DOCUMENT_ID}/export?format=csv&gid=0`,
+            format2: `https://docs.google.com/spreadsheets/d/${DOCUMENT_ID}/export?format=csv`,
+            format3: `https://docs.google.com/spreadsheets/d/e/2PACX-1vQwYSSUeBBko88Bk_8HM2mOsNkrOcfJYKKAx5IqpoiQ8l8gBRAG_8I38mYRKvJRY5cWpctE1GW1_xrb/pub?output=csv`,
+            format4: `https://docs.google.com/spreadsheets/d/${DOCUMENT_ID}/gviz/tq?tqx=out:csv`
+        };
+
+        function logResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `
+                <strong>${new Date().toLocaleTimeString()}</strong><br>
+                ${message}
+            `;
+            results.appendChild(div);
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current.trim());
+            return result;
+        }
+
+        async function testCellB10() {
+            logResult('🔄 Testing Cell B10 access...', 'info');
+            
+            try {
+                const response = await fetch(CSV_URLS.format1);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const csvText = await response.text();
+                logResult(`✅ CSV fetched successfully! Length: ${csvText.length} characters`, 'success');
+                
+                // Parse CSV and get cell B10 (Column B = index 1, Row 10 = index 9)
+                const lines = csvText.split('\n').filter(line => line.trim());
+                
+                if (lines.length < 10) {
+                    logResult(`❌ Not enough rows! Found ${lines.length} rows, need at least 10`, 'error');
+                    return;
+                }
+
+                const row10 = parseCSVLine(lines[9]); // Row 10 (0-indexed = 9)
+                const cellB10 = row10[1] || ''; // Column B (0-indexed = 1)
+
+                logResult(`🎯 <strong>Cell B10 Value:</strong> "${cellB10}"`, 'success');
+                logResult(`📋 <strong>Full Row 10:</strong><pre>${JSON.stringify(row10, null, 2)}</pre>`, 'info');
+                
+                // Show first few rows for context
+                logResult(`📄 <strong>First 5 rows for context:</strong><pre>${lines.slice(0, 5).map((line, i) => `Row ${i+1}: ${line}`).join('\n')}</pre>`, 'info');
+
+            } catch (error) {
+                logResult(`❌ Error accessing Cell B10: ${error.message}`, 'error');
+                logResult(`🔗 Tried URL: ${CSV_URLS.format1}`, 'error');
+            }
+        }
+
+        async function testFullCSV() {
+            logResult('🔄 Testing full CSV structure...', 'info');
+            
+            try {
+                const response = await fetch(CSV_URLS.format1);
+                const csvText = await response.text();
+                const lines = csvText.split('\n').filter(line => line.trim());
+                
+                logResult(`📊 <strong>CSV Structure:</strong><br>
+                    • Total lines: ${lines.length}<br>
+                    • First line: "${lines[0]?.substring(0, 100)}..."<br>
+                    • Row 6: "${lines[5]?.substring(0, 100)}..."<br>
+                    • Row 10: "${lines[9]?.substring(0, 100)}..."`, 'success');
+
+                // Show raw CSV sample
+                logResult(`📄 <strong>Raw CSV Sample (first 500 chars):</strong><pre>${csvText.substring(0, 500)}...</pre>`, 'info');
+
+            } catch (error) {
+                logResult(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAlternativeURL() {
+            logResult('🔄 Testing alternative URL formats...', 'info');
+            
+            for (const [formatName, url] of Object.entries(CSV_URLS)) {
+                try {
+                    logResult(`Testing ${formatName}: ${url}`, 'info');
+                    const response = await fetch(url);
+                    
+                    if (response.ok) {
+                        const csvText = await response.text();
+                        const lines = csvText.split('\n').filter(line => line.trim());
+                        logResult(`✅ ${formatName} works! ${lines.length} lines`, 'success');
+                        
+                        if (lines.length >= 10) {
+                            const row10 = parseCSVLine(lines[9]);
+                            const cellB10 = row10[1] || '';
+                            logResult(`🎯 ${formatName} Cell B10: "${cellB10}"`, 'success');
+                        }
+                    } else {
+                        logResult(`❌ ${formatName} failed: HTTP ${response.status}`, 'error');
+                    }
+                } catch (error) {
+                    logResult(`❌ ${formatName} error: ${error.message}`, 'error');
+                }
+                
+                // Small delay between requests
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+
+        // Auto-run test on page load
+        window.addEventListener('load', () => {
+            logResult('🚀 Google Sheets Cell B10 Test Ready', 'info');
+            logResult(`📋 Document ID: ${DOCUMENT_ID}`, 'info');
+        });
+    </script>
+</body>
+</html>

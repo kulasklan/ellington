@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1178" className="w-full h-full">
+  <defs>
+    <style>
+      .apartment-shape {
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .apartment-shape.available {
+        fill: rgba(34, 197, 94, 0.25);
+        stroke: #22c55e;
+        stroke-width: 2;
+      }
+      .apartment-shape.available:hover {
+        fill: rgba(34, 197, 94, 0.4);
+        stroke-width: 3;
+      }
+      .apartment-shape.available.selected {
+        fill: rgba(34, 197, 94, 0.75);
+        stroke: #ffffff;
+        stroke-width: 4;
+      }
+      .apartment-shape.reserved {
+        fill: rgba(6, 182, 212, 0.25);
+        stroke: #06b6d4;
+        stroke-width: 2;
+      }
+      .apartment-shape.reserved:hover {
+        fill: rgba(6, 182, 212, 0.4);
+        stroke-width: 3;
+      }
+      .apartment-shape.reserved.selected {
+        fill: rgba(6, 182, 212, 0.75);
+        stroke: #ffffff;
+        stroke-width: 4;
+      }
+      .apartment-shape.sold {
+        fill: rgba(239, 68, 68, 0.25);
+        stroke: #ef4444;
+        stroke-width: 2;
+      }
+      .apartment-shape.sold:hover {
+        fill: rgba(239, 68, 68, 0.4);
+        stroke-width: 3;
+      }
+      .apartment-shape.sold.selected {
+        fill: rgba(239, 68, 68, 0.75);
+        stroke: #ffffff;
+        stroke-width: 4;
+      }
+    </style>
+  </defs>
+  
+  <!-- Apartment shapes from the SVG -->
+  <polygon id="AP_01-KAT1" className="apartment-shape" data-apartment="AP_01-KAT1" points="981.37,844.94 495.53,851.98 190.05,826.02 190.05,634.32 495.11,608.14 981.37,630.33"/>
+  <polygon id="AP_02-KAT1" className="apartment-shape" data-apartment="AP_02-KAT1" points="1541.71,842.61 1308.59,843.25 981.37,844.94 981.37,629.49 1541.71,646.65"/>
+  <polygon id="AP_03-KAT2" className="apartment-shape" data-apartment="AP_03-KAT2" points="981.37,629.49 495.11,607.3 190.05,634.32 190.56,405.76 484.89,261.7 981.37,328.26"/>
+  <polygon id="AP_04-KAT2" className="apartment-shape" data-apartment="AP_04-KAT2" points="981.37,328.26 1510.42,395.98 1511.06,448.2 1541.71,450.54 1541.71,646.65 981.37,630.39"/>
+</svg>

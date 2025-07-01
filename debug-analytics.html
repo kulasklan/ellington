@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Modal Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1f2937;
+            color: white;
+            padding: 20px;
+        }
+        .debug-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #374151;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        button {
+            background: #f59e0b;
+            color: #111827;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        .result {
+            background: #111827;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        .error { border-left-color: #dc2626; }
+        .success { border-left-color: #059669; }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🔍 Analytics Modal Debug Tool</h1>
+        
+        <button onclick="testAnalyticsButton()">🧪 Test Analytics Button</button>
+        <button onclick="testModalElements()">📋 Test Modal Elements</button>
+        <button onclick="testCSS()">🎨 Test CSS Classes</button>
+        <button onclick="testJavaScript()">⚙️ Test JavaScript</button>
+        <button onclick="forceShowModal()">🚀 Force Show Modal</button>
+        
+        <div id="debugResults"></div>
+    </div>
+
+    <script>
+        function logResult(message, type = 'info') {
+            const results = document.getElementById('debugResults');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong><br>${message}`;
+            results.appendChild(div);
+        }
+
+        function testAnalyticsButton() {
+            logResult('🔄 Testing analytics button...', 'info');
+            
+            // Check if button exists
+            const button = document.querySelector('button[onclick*="showAnalyticsDashboard"]');
+            if (button) {
+                logResult('✅ Analytics button found in DOM', 'success');
+                logResult(`Button text: "${button.textContent}"`, 'info');
+                logResult(`Button onclick: "${button.getAttribute('onclick')}"`, 'info');
+            } else {
+                logResult('❌ Analytics button NOT found in DOM', 'error');
+                
+                // Check for alternative selectors
+                const altButton = document.querySelector('button:contains("ANALYTICS")');
+                if (altButton) {
+                    logResult('⚠️ Found button with ANALYTICS text but no onclick', 'error');
+                } else {
+                    logResult('❌ No button with ANALYTICS text found', 'error');
+                }
+            }
+        }
+
+        function testModalElements() {
+            logResult('🔄 Testing modal elements...', 'info');
+            
+            // Check modal container
+            const modal = document.getElementById('analyticsModal');
+            if (modal) {
+                logResult('✅ Analytics modal element found', 'success');
+                logResult(`Modal display: ${getComputedStyle(modal).display}`, 'info');
+                logResult(`Modal visibility: ${getComputedStyle(modal).visibility}`, 'info');
+                logResult(`Modal opacity: ${getComputedStyle(modal).opacity}`, 'info');
+            } else {
+                logResult('❌ Analytics modal element NOT found', 'error');
+            }
+            
+            // Check modal content
+            const content = document.getElementById('analyticsContent');
+            if (content) {
+                logResult('✅ Analytics content element found', 'success');
+            } else {
+                logResult('❌ Analytics content element NOT found', 'error');
+            }
+        }
+
+        function testCSS() {
+            logResult('🔄 Testing CSS classes...', 'info');
+            
+            const modal = document.getElementById('analyticsModal');
+            if (!modal) {
+                logResult('❌ Cannot test CSS - modal not found', 'error');
+                return;
+            }
+            
+            // Check if .visible class exists in CSS
+            const testDiv = document.createElement('div');
+            testDiv.className = 'analytics-modal visible';
+            document.body.appendChild(testDiv);
+            
+            const visibleStyles = getComputedStyle(testDiv);
+            logResult(`Visible class opacity: ${visibleStyles.opacity}`, 'info');
+            logResult(`Visible class visibility: ${visibleStyles.visibility}`, 'info');
+            
+            document.body.removeChild(testDiv);
+            
+            // Test adding visible class
+            modal.classList.add('visible');
+            const modalStyles = getComputedStyle(modal);
+            logResult(`Modal with .visible - opacity: ${modalStyles.opacity}`, 'info');
+            logResult(`Modal with .visible - visibility: ${modalStyles.visibility}`, 'info');
+            modal.classList.remove('visible');
+        }
+
+        function testJavaScript() {
+            logResult('🔄 Testing JavaScript functions...', 'info');
+            
+            // Check if showAnalyticsDashboard function exists
+            if (typeof showAnalyticsDashboard === 'function') {
+                logResult('✅ showAnalyticsDashboard function exists', 'success');
+                
+                try {
+                    // Try to call it
+                    showAnalyticsDashboard();
+                    logResult('✅ showAnalyticsDashboard executed without errors', 'success');
+                } catch (error) {
+                    logResult(`❌ Error calling showAnalyticsDashboard: ${error.message}`, 'error');
+                }
+            } else {
+                logResult('❌ showAnalyticsDashboard function NOT found', 'error');
+                logResult('Available functions:', 'info');
+                
+                // List available functions
+                const functions = [];
+                for (let prop in window) {
+                    if (typeof window[prop] === 'function' && prop.includes('Analytics')) {
+                        functions.push(prop);
+                    }
+                }
+                logResult(`Found: ${functions.join(', ') || 'None'}`, 'info');
+            }
+            
+            // Check if closeAnalyticsDashboard function exists
+            if (typeof closeAnalyticsDashboard === 'function') {
+                logResult('✅ closeAnalyticsDashboard function exists', 'success');
+            } else {
+                logResult('❌ closeAnalyticsDashboard function NOT found', 'error');
+            }
+        }
+
+        function forceShowModal() {
+            logResult('🔄 Force showing modal...', 'info');
+            
+            const modal = document.getElementById('analyticsModal');
+            if (!modal) {
+                logResult('❌ Cannot force show - modal element not found', 'error');
+                return;
+            }
+            
+            // Force show with inline styles
+            modal.style.display = 'flex';
+            modal.style.opacity = '1';
+            modal.style.visibility = 'visible';
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(17, 24, 39, 0.9)';
+            modal.style.zIndex = '10000';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            
+            logResult('✅ Modal forced to show with inline styles', 'success');
+            logResult('If you can see a modal now, the issue is with the CSS or JavaScript', 'info');
+            
+            // Add close functionality
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    logResult('Modal closed by clicking outside', 'info');
+                }
+            });
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            logResult('🚀 Analytics Debug Tool Ready', 'info');
+            logResult('Click buttons above to diagnose the analytics modal issue', 'info');
+        });
+    </script>
+</body>
+</html>

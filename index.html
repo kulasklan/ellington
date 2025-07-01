@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ellington Building - Premium Apartment Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1 class="building-title">ELLINGTON</h1>
+        <div class="header-buttons">
+            <button class="cta-button primary" onclick="handleInterestClick()">
+                INTERESTED
+            </button>
+            <button class="cta-button secondary" onclick="showAnalyticsDashboard()">
+                📊 ANALYTICS
+            </button>
+        </div>
+    </header>
+
+    <!-- Background Switcher Arrow - Left side, vertically centered -->
+    <div class="background-switcher" id="backgroundSwitcher">
+        <button class="background-switch-btn" onclick="switchBackground()" title="Switch Background View">
+            <span class="arrow-icon" id="arrowIcon">→</span>
+        </button>
+        
+        <!-- Background indicator -->
+        <div class="background-indicator" id="backgroundIndicator">
+            Interactive
+        </div>
+    </div>
+
+    <!-- Main Building Container -->
+    <div class="building-container">
+        <div class="building-wrapper">
+            <!-- Background Image - DYNAMIC SWITCHING -->
+            <div class="building-image-container">
+                <img src="src/assets/background.webp" alt="Ellington Building" class="building-image" id="buildingImage"
+                     onerror="console.warn('Failed to load background.webp'); this.src='https://images.pexels.com/photos/1370704/pexels-photo-1370704.jpeg';">
+            </div>
+
+            <!-- SVG Overlay with apartment shapes -->
+            <svg class="overlay-svg" id="overlaySvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1178" preserveAspectRatio="xMidYMid slice">
+                <!-- Tower A Apartments (Right Side) -->
+                <g class="apartment-shape" data-apartment="AP-24A" data-bedrooms="2" data-floor="24" data-area="95">
+                    <polygon points="1178,211.71 1121,193 1113.5,197.26 1113.5,161 1178,182.75"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-23A" data-bedrooms="3" data-floor="23" data-area="120">
+                    <polygon points="1178,239.46 1121,223 1113.5,228.19 1113.5,197.26 1121,193 1178,211.71"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-22A" data-bedrooms="2" data-floor="22" data-area="95">
+                    <polygon points="1178,268.21 1122,252 1113.5,257.98 1113.5,228.19 1121,223 1178,239.46"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-21A" data-bedrooms="3" data-floor="21" data-area="120">
+                    <polygon points="1178,297.46 1124,282 1113.5,287.97 1113.5,257.98 1122,252 1178,268.21"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-20A" data-bedrooms="2" data-floor="20" data-area="95">
+                    <polygon points="1178,324.71 1123,310 1113.5,317.25 1113.5,287.97 1124,282 1178,297.46"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-19A" data-bedrooms="3" data-floor="19" data-area="110">
+                    <path d="M1178 354.87l-64.5 -14.78c0,-7.88 0,-15.7 0,-22.84l9.5 -7.25 55 14.71 0 30.16z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-18A" data-bedrooms="4" data-floor="18" data-area="140">
+                    <path d="M1178 354.87l-105.5 -22.43c0,9.32 5.25,22.43 13.5,27.56l92 22.71 0 -27.84z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-17A" data-bedrooms="2" data-floor="17" data-area="85">
+                    <polygon points="1178,412.96 1062,390 1062,354.87 1178,382.71"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-16A" data-bedrooms="3" data-floor="16" data-area="115">
+                    <polygon points="1178,441 1113.5,429.05 1113.5,399.94 1178,412.96"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-15A" data-bedrooms="2" data-floor="15" data-area="90">
+                    <polygon points="1178,468.21 1122,458 1113.5,462.63 1113.5,429.05 1178,441"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-14A" data-bedrooms="3" data-floor="14" data-area="125">
+                    <polygon points="1178,496.71 1122,487 1113.5,491.35 1113.5,462.63 1122,458 1178,468.21"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-13A" data-bedrooms="2" data-floor="13" data-area="95">
+                    <polygon points="1178,526 1122,517 1113.5,520.54 1113.5,491.35 1122,487 1178,496.71"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-12A" data-bedrooms="3" data-floor="12" data-area="110">
+                    <polygon points="1178,553.71 1121,546 1113.5,550.12 1113.5,520.54 1122,517 1178,526"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-11A" data-bedrooms="2" data-floor="11" data-area="85">
+                    <polygon points="1178,582.71 1122,576 1113.5,580.25 1113.5,550.12 1121,546 1178,553.71"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-10A" data-bedrooms="3" data-floor="10" data-area="120">
+                    <polygon points="1178,611.71 1122,606 1113.5,608.55 1113.5,580.25 1122,576 1178,582.71"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-9A" data-bedrooms="2" data-floor="9" data-area="95">
+                    <polygon points="1178,640.46 1122,635 1113.5,638.21 1113.5,608.55 1122,606 1178,611.71"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-8A" data-bedrooms="3" data-floor="8" data-area="115">
+                    <polygon points="1178,668.21 1123,665 1113.5,666.36 1113.5,638.21 1122,635 1178,640.46"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-7A" data-bedrooms="2" data-floor="7" data-area="90">
+                    <polygon points="1178,696.96 1113.5,694.57 1113.5,666.36 1123,665 1178,668.21"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-6A" data-bedrooms="3" data-floor="6" data-area="125">
+                    <polygon points="1178,726.71 1113.5,723.95 1113.5,694.57 1178,696.96"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-5A" data-bedrooms="2" data-floor="5" data-area="85">
+                    <polygon points="1178,754.46 1113.5,754.46 1113.5,723.95 1178,726.71"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-4A" data-bedrooms="3" data-floor="4" data-area="110">
+                    <polygon points="1178,783.71 1113.5,783.18 1113.5,754.46 1178,754.46"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-3A" data-bedrooms="2" data-floor="3" data-area="95">
+                    <polygon points="1178,812.71 1113.5,814.34 1113.5,783.18 1178,783.71"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-2A" data-bedrooms="3" data-floor="2" data-area="120">
+                    <polygon points="1178,841.85 1113.5,842.83 1113.5,814.34 1178,812.71"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-1A" data-bedrooms="4" data-floor="1" data-area="150">
+                    <polygon points="1178,841.85 1113.5,842.83 1113.5,873.5 1178,871"/>
+                </g>
+
+                <!-- Tower B Apartments (Left Side) -->
+                <g class="apartment-shape" data-apartment="AP-1B" data-bedrooms="4" data-floor="1" data-area="160">
+                    <path d="M912.63 845.55l68.23 0 124.41 -2.53 0 31.48c-64.26,-0.33 -149.02,6.5 -192.77,-1l0.13 -27.95z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-2B" data-bedrooms="3" data-floor="2" data-area="125">
+                    <polygon points="912.63,845.55 980.86,845.55 1105.27,843.02 1105.27,814.06 912.78,814.33"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-3B" data-bedrooms="2" data-floor="3" data-area="100">
+                    <polygon points="912.78,814.65 1105.27,814.38 1105.27,783.55 912.92,783.5"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-4B" data-bedrooms="3" data-floor="4" data-area="115">
+                    <polygon points="912.92,783.18 1105.27,783.23 1105.27,754.27 977,751.75 952.25,751.5 913.07,752.4"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-5B" data-bedrooms="2" data-floor="5" data-area="90">
+                    <polygon points="913.07,752.4 952.25,751.5 977,751.75 1105.27,754.27 1105.27,723.72 972.98,719.98 948.48,719.98 913.21,723.36"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-6B" data-bedrooms="3" data-floor="6" data-area="130">
+                    <polygon points="913.21,723.36 948.48,719.98 972.98,719.98 1105.27,723.72 1105.27,694.25 968.98,689 945.75,689 913.35,693.66"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-7B" data-bedrooms="2" data-floor="7" data-area="95">
+                    <polygon points="913.28,692.37 948.56,688.99 973.06,688.99 1105.35,692.73 1105.35,663.26 969.06,658.01 945.83,658.01 913.42,662.67"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-8B" data-bedrooms="3" data-floor="8" data-area="120">
+                    <path d="M913.42 662.67l23.04 -4.27c9.75,-2.25 18.39,-1.52 27.5,-1l141.39 5.86 -0.08 -27.38 -126.09 -6.14 -31.32 -1.22 -33.9 6.23 -17.64 3.61 0 26.64 17.1 -2.33z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-9B" data-bedrooms="2" data-floor="9" data-area="85">
+                    <path d="M913.96 634.75l22.54 -4.75c9.75,-2.25 18.39,-1.52 27.5,-1l141.27 6.88 0 -30.51 -126.04 -11.52 -31.5 0 -33.77 7.32 0 33.58z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-10B" data-bedrooms="3" data-floor="10" data-area="110">
+                    <polygon points="913.96,601.17 947.73,593.85 979.23,593.85 1105.27,605.37 1105.27,574.7 976.73,561 949.48,561 913.96,569.07"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-11B" data-bedrooms="2" data-floor="11" data-area="95">
+                    <path d="M913.96 569.07l35.52 -8.07 27.25 0 128.54 13.7 0 -29.72c-29.11,-3.59 -125.59,-15.48 -127.29,-15.48 -2,0 -27.98,0 -27.98,0l-36.04 11.18 0 28.39z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-12B" data-bedrooms="3" data-floor="12" data-area="125">
+                    <path d="M913.96 540.68l36.04 -11.18c0,0 25.98,0 27.98,0 1.7,0 98.18,11.89 127.29,15.48l0 -30.32 -128.04 -17.95 -29.5 0 -33.77 10.19 0 33.78z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-13B" data-bedrooms="2" data-floor="13" data-area="90">
+                    <polygon points="913.96,506.89 947.73,496.71 977.23,496.71 1105.27,514.65 1105.27,484.54 975.98,465.5 951.5,465.5 913.96,480.16"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-14B" data-bedrooms="3" data-floor="14" data-area="115">
+                    <polygon points="913.96,480.16 951.5,465.5 975.98,465.5 1105.27,484.54 1105.27,456.38 976.23,434.25 950.25,434.25 913.96,449.65"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-15B" data-bedrooms="2" data-floor="15" data-area="100">
+                    <polygon points="913.96,449.65 950.25,434.25 976.23,434.25 1105.27,456.38 1105.27,427.54 976.48,403.75 949.5,403.75 913.96,419.57"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-16B" data-bedrooms="3" data-floor="16" data-area="120">
+                    <polygon points="913.96,419.57 949.5,403.75 976.48,403.75 1105.27,427.54 1105.27,397.95 1062,391 977.98,373.5 950.75,373.5 913.96,391.24"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-17B" data-bedrooms="2" data-floor="17" data-area="95">
+                    <polygon points="913.96,391.24 950.75,373.5 977.98,373.5 1062,391 1062.51,355.61 976.5,338.75 951,339.75 913.96,358.5"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-18B" data-bedrooms="3" data-floor="18" data-area="130">
+                    <path d="M913.96 358.5l37.04 -18.75 25.5 -1 86.01 16.86 0.4 -27.31 -91.82 -20.63c-6.14,-1.08 -13.34,-1.67 -20.7,0.17l-36.43 18.85 0 31.81z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-19B" data-bedrooms="2" data-floor="19" data-area="85">
+                    <path d="M913.96 297.45l35.26 -19.69c10.28,-4.15 21.03,-2.65 29.03,-1.65l126.75 31.08 0 30.35 -124.18 -27.68c-11.75,-2.95 -19.82,-5 -28.82,-3l-38.04 19.68 0 -29.09z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-20B" data-bedrooms="3" data-floor="20" data-area="110">
+                    <path d="M913.96 297.76l35.26 -19.7c10.25,-3.31 21.28,-2.9 29.03,-1.65l126.75 31.09 0 -29.44 -128.75 -35.4c-8.25,-1.25 -17.25,-1 -27.03,3.11l-35.26 21.58 0 30.41z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-21B" data-bedrooms="2" data-floor="21" data-area="100">
+                    <path d="M913.96 267.11c11.76,-7.19 23.51,-14.39 35.26,-21.58 9.03,-4.61 18.53,-4.36 27.03,-3.11 42.92,11.8 85.83,23.6 128.75,35.41l0 -30.12 -129.05 -37.7c-5.22,-1.52 -19.2,-1.58 -25.72,1.62 -1.26,0.62 -24.74,15.66 -36.27,23.45 0,10.68 0,21.36 0,32.03z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-22B" data-bedrooms="3" data-floor="22" data-area="125">
+                    <path d="M914.24 233.45c12.08,-7.82 25.42,-15.13 37.51,-22.95 8,-2.75 17,-1.5 24.14,-0.5 43.13,12.03 86.26,24.05 129.38,36.08l-0.27 -28.8 -129.75 -37.28c-9.47,-0.99 -17.5,-2.75 -29,2.5l-32.29 22.97c0,9.89 0.28,18.08 0.28,27.98z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-23B" data-bedrooms="2" data-floor="23" data-area="90">
+                    <path d="M913.96 174.61c13.4,-10.34 34.04,-24.86 34.04,-24.86 10.44,-3.28 16.75,-4.25 27.25,-2.25l129.75 39.44 0 30.34 -129.75 -37.28c-7.75,-0.75 -17.25,-3 -29,2.5l-32.29 22.97 0 -30.86z"/>
+                </g>
+                <g class="apartment-shape" data-apartment="AP-24B" data-bedrooms="3" data-floor="24" data-area="115">
+                    <path d="M913.96 174.72c13.4,-10.33 34.04,-24.85 34.04,-24.85 8.5,-4 19.25,-3.75 27.25,-2.25 43.25,13.14 86.5,26.29 129.75,39.43l0 -29.17 -113 -34.76c-14.91,-5.65 -26,-10 -42,-3l-36.04 25.06c0,9.85 0,19.69 0,29.54z"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Controls -->
+    <div class="bottom-controls" id="bottomControls">
+        <div class="controls-grid">
+            <!-- Bedroom Filters -->
+            <div class="control-group">
+                <div class="control-label">Bedrooms</div>
+                <div class="bedroom-filters" id="bedroomFilters">
+                    <!-- Dynamic bedroom buttons will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Floor Range -->
+            <div class="control-group">
+                <div class="control-label">Floors</div>
+                <div class="range-group">
+                    <div class="range-display" id="floorRange">1 - 24</div>
+                    <div class="range-container">
+                        <input type="range" id="floorMin" class="range-slider range-min" min="1" max="24" value="1">
+                        <input type="range" id="floorMax" class="range-slider range-max" min="1" max="24" value="24">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Area Range -->
+            <div class="control-group">
+                <div class="control-label">Area</div>
+                <div class="range-group">
+                    <div class="range-display" id="areaRange">80 - 160 m²</div>
+                    <div class="range-container">
+                        <input type="range" id="areaMin" class="range-slider range-min" min="80" max="160" value="80">
+                        <input type="range" id="areaMax" class="range-slider range-max" min="80" max="160" value="160">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="control-group">
+                <div class="control-label">Actions</div>
+                <div class="action-buttons">
+                    <button class="action-btn reset-btn" onclick="resetFilters()">Reset Filters</button>
+                    <button class="action-btn clear-btn" onclick="clearAllShapes()">Clear All</button>
+                </div>
+            </div>
+
+            <!-- Status Legend -->
+            <div class="status-legend">
+                <div class="status-item">
+                    <div class="status-dot status-available"></div>
+                    <span>Free</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot status-reserved"></div>
+                    <span>Reserved</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot status-sold"></div>
+                    <span>Sold</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Mode Indicator -->
+    <div class="demo-mode-indicator" id="demoModeIndicator" style="display: none;">
+        <div class="demo-content">
+            <div class="demo-title">🎬 Demo Mode - Background 2</div>
+            <div class="demo-subtitle">Click the arrow to return to interactive mode</div>
+        </div>
+    </div>
+
+    <!-- Apartment Details Panel -->
+    <div class="details-panel" id="detailsPanel">
+        <button class="close-panel" onclick="closeDetailsPanel()">×</button>
+        <div class="panel-header" id="panelHeader">Apartment Details</div>
+        <div class="panel-content" id="panelContent">
+            <!-- Content populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Analytics Dashboard Modal -->
+    <div class="analytics-modal" id="analyticsModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 Ellington Analytics Dashboard</h2>
+                <button class="close-modal" onclick="closeAnalyticsDashboard()">×</button>
+            </div>
+            <div class="analytics-content" id="analyticsContent">
+                <!-- Analytics content populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load main script first, then analytics -->
+    <script src="script.js"></script>
+    <script src="analytics.js"></script>
+</body>
+</html>
